@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="mb-4">
+    <i class="bi bi-person-gear text-info"></i>
+    {{ 'Edit CCO' if form.comml_coordinator.data else 'Add CCO' }}
+</h2>
+<form method="post" class="row g-3">
+    {{ form.hidden_tag() }}
+    <div class="col-md-6">
+        <label for="cust_no" class="form-label">Customer No</label>
+        {{ form.cust_no(class="form-control") }}
+    </div>
+    <div class="col-md-6">
+        <label for="comml_coordinator" class="form-label">Coordinator Name</label>
+        {{ form.comml_coordinator(class="form-control") }}
+    </div>
+    <div class="col-md-6">
+        <label for="staff_no_cco" class="form-label">Staff No</label>
+        {{ form.staff_no_cco(class="form-control") }}
+    </div>
+    <div class="col-md-6">
+        <label for="mobile_cco" class="form-label">Mobile</label>
+        {{ form.mobile_cco(class="form-control") }}
+    </div>
+    <div class="col-md-6">
+        <label for="auto_cco" class="form-label">Auto CCO</label>
+        {{ form.auto_cco(class="form-control") }}
+    </div>
+    <div class="col-md-6">
+        <label for="mail_cco" class="form-label">Email</label>
+        {{ form.mail_cco(class="form-control") }}
+    </div>
+    <div class="col-12">
+        <label for="from_address" class="form-label">From Address</label>
+        {{ form.from_address(class="form-control", rows=2) }}
+    </div>
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-check2-circle"></i> Save
+        </button>
+        <a href="{{ url_for('list_cco') }}" class="btn btn-secondary ms-2">
+            <i class="bi bi-arrow-left"></i> Cancel
+        </a>
+    </div>
+</form>
+{% endblock %}
