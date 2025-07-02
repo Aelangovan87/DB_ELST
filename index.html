@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="content-90vw">
+<h2 class="my-4 fw-bold d-flex align-items-center gap-3">
+    <i class="bi bi-folder2-open text-primary"></i>
+    <span>Projects</span>
+    <a href="{{ url_for('add_project') }}" class="btn btn-success btn-sm ms-auto px-3 py-2 rounded-3 shadow-sm">
+      <i class="bi bi-plus-lg"></i> Add Project
+    </a>
+</h2>
+<div class="table-responsive rounded-4 border-0 shadow-sm">
+    <table id="projectsTable" class="table table-bordered table-hover table-striped align-middle mb-0 w-100 rounded-4 overflow-hidden">
+        <thead class="table-primary text-center align-middle">
+            <tr>
+                <th scope="col" class="customer-no-col">Customer No</th>
+                <th scope="col">Additional Customer No</th>
+                <th scope="col" class="customer-name-col">Customer Name</th>
+                <th scope="col">Project Name</th>
+                <th scope="col">Trans. Reference No.</th>
+                <th scope="col">Project Status</th>
+                <th scope="col">Remarks</th>
+                <th scope="col">Total Copies</th> <!-- New column -->
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody id="project-filter-row">
+            <tr>
+                <td><input type="text" class="form-control form-control-sm project-filter" placeholder="Filter Customer No"></td>
+                <td><input type="text" class="form-control form-control-sm project-filter" placeholder="Filter Additional No"></td>
+                <td><input type="text" class="form-control form-control-sm project-filter" placeholder="Filter Customer Name"></td>
+                <td><input type="text" class="form-control form-control-sm project-filter" placeholder="Filter Project Name"></td>
+                <td><input type="text" class="form-control form-control-sm project-filter" placeholder="Filter Reference"></td>
+                <td><input type="text" class="form-control form-control-sm project-filter" placeholder="Filter Status"></td>
+                <td><input type="text" class="form-control form-control-sm project-filter" placeholder="Filter Remarks"></td>
+                <td></td>
+            </tr>
+        </tbody>
+        <tbody id="project-data-rows">
+        {% for p in projects %}
+            <tr>
+                <td class="text-center customer-no-cell">{{ p['cust_no'] }}</td>
+                <td class="text-center">{{ p['additional_cust_no'] }}</td>
+                <td class="text-left customer-name-cell" title="{{ p['customer_name'] }}">{{ p['customer_name'] }}</td>
+                <td class="text-left">{{ p['project_name'] }}</td>
+                <td class="text-left">{{ p['reference_no'] }}</td>
+                <td class="text-center">{{ p['project_status'] }}</td>
+                <td class="text-left">{{ p['status_remarks'] }}</td>
+                <td class="text-center">{{ p['total_copies'] }}</td> <!-- New cell -->
+                <td class="text-center">
+                    <div class="d-inline-flex gap-2 align-items-center flex-nowrap">
+                        <a href="{{ url_for('edit_project', cust_no=p['cust_no']) }}" class="btn btn-outline-primary btn-sm p-1 px-2 rounded-circle shadow-sm" title="Edit">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <form action="{{ url_for('delete_project', cust_no=p['cust_no']) }}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-outline-danger btn-sm p-1 px-2 rounded-circle shadow-sm" title="Delete" onclick="return confirm('Delete this project?')">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8" class="text-left text-muted py-3">No projects found.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>
+<style>
+.content-90vw {
+    width: 90vw;
+    max-width: 1700px;
+    margin: 0 auto 2rem auto;
+}
+.table {
+    width: 100%;
+    table-layout: auto;
+    word-break: break-word;
+    border-radius: 1rem;
+    overflow: hidden;
+    background: #fff;
+    /* box-shadow: 0 2px 12px rgba(21,51,92,0.09); */
+}
+.table th, .table td {
+    vertical-align: middle;
+    font-size: 1.04rem;
+    white-space: normal;
+}
+.customer-no-col, .customer-no-cell {
+    white-space: nowrap !important;
+    max-width: 110px;
+}
+.customer-name-col, .customer-name-cell {
+    white-space: nowrap !important;
+    max-width: 320px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.table thead th {
+    background: linear-gradient(90deg, #c7e0fa 70%, #e3f2fd 100%);
+    font-weight: 600;
+    color: #234b7d;
+    border-bottom: 2px solid #1565c0;
+}
+.table-hover tbody tr:hover {
+    background-color: #e3f0fa;
+    transition: background 0.15s;
+}
+.btn-outline-primary, .btn-outline-danger {
+    min-width: 36px;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+@media (max-width: 991.98px) {
+    .content-90vw {
+        width: 98vw;
+        padding-left: 2vw;
+        padding-right: 2vw;
+    }
+    .customer-name-col, .customer-name-cell {
+        max-width: 140px;
+        font-size: .96rem;
+    }
+    .table th, .table td {
+        font-size: 0.95rem;
+    }
+}
+</style>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var table = document.getElementById('projectsTable');
+        var filters = table.querySelectorAll('.project-filter');
+        var dataRows = document.getElementById('project-data-rows').getElementsByTagName('tr');
+        filters.forEach(function(input, col) {
+            input.addEventListener('keyup', function() {
+                var filterValues = [];
+                filters.forEach(function(f) { filterValues.push(f.value.toLowerCase()); });
+                for (var i = 0; i < dataRows.length; i++) {
+                    var show = true;
+                    for (var j = 0; j < filters.length; j++) {
+                        var cell = dataRows[i].cells[j];
+                        if (!cell) continue;
+                        var cellText = cell.textContent.toLowerCase();
+                        if (filterValues[j] && cellText.indexOf(filterValues[j]) === -1) {
+                            show = false; break;
+                        }
+                    }
+                    dataRows[i].style.display = show ? '' : 'none';
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

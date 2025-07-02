@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-4">
+    <h3>{{ action }} Drawing</h3>
+    <form method="post">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            {{ form.drawing_ref.label(class="form-label") }}
+            {{ form.drawing_ref(class="form-control") }}
+        </div>
+        <div class="mb-3">
+            {{ form.sheet_no.label(class="form-label") }}
+            {{ form.sheet_no(class="form-control") }}
+        </div>
+        <div class="mb-3">
+            {{ form.description.label(class="form-label") }}
+            {{ form.description(class="form-control", rows=3) }}
+        </div>
+        <button type="submit" class="btn btn-success">{{ action }}</button>
+        <a href="{{ url_for('elst_drawings', erection_list_id=erection_list_id) }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

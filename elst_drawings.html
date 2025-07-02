@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .elst-container {
+        width: 90vw;
+        max-width: 1800px;
+        margin: 0 auto;
+        padding: 2rem 0 1rem 0;
+    }
+    .elst-table-responsive {
+        width: 100%;
+        overflow-x: auto;
+    }
+    .elst-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #f8fafc;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(44, 62, 80, 0.07);
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+        table-layout: auto;
+    }
+    .elst-table th, .elst-table td {
+        padding: 0.5rem 0.25rem;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        border: 1px solid #eaeaea;
+        max-width: 120px;
+    }
+    .elst-table thead th {
+        background: linear-gradient(87deg, #0ea5e9 0%, #38bdf8 100%);
+        color: #fff;
+        font-weight: 700;
+        letter-spacing: .03em;
+        border-bottom: 3px solid #0ea5e9;
+        position: sticky;
+        top: 0;
+        z-index: 2;
+    }
+    .elst-table tbody tr:nth-child(odd) {
+        background: #e0f2fe;
+    }
+    .elst-table tbody tr:nth-child(even) {
+        background: #f1f5f9;
+    }
+    .elst-table tbody tr:hover {
+        background: #bae6fd;
+        box-shadow: 0 2px 6px rgba(14, 165, 233, 0.08);
+    }
+    .elst-table td {
+        color: #334155;
+        font-weight: 500;
+    }
+    @media (max-width: 1300px) {
+        .elst-container {
+            width: 98vw;
+            padding: 1rem 0.2rem;
+        }
+        .elst-table {
+            font-size: 0.84rem;
+        }
+        .elst-table th, .elst-table td {
+            padding: 0.32rem 0.12rem;
+            max-width: 80px;
+        }
+    }
+    @media (max-width: 800px) {
+        .elst-container {
+            width: 100vw;
+            padding: 0.5rem 0;
+        }
+        .elst-table {
+            font-size: 0.68rem;
+        }
+        .elst-table th, .elst-table td {
+            padding: 0.18rem 0.06rem;
+            max-width: 60px;
+        }
+        h3 { font-size: 1rem; }
+    }
+    @media (max-width: 500px) {
+        .elst-container {
+            width: 100vw;
+            padding: 0.2rem 0;
+        }
+        .elst-table {
+            font-size: 0.56rem;
+        }
+        .elst-table th, .elst-table td {
+            padding: 0.14rem 0.03rem;
+            max-width: 40px;
+        }
+        h3 { font-size: 0.9rem; }
+    }
+</style>
+<div class="elst-container">
+    <h3>Drawings for ELST #{{ elst['elst_no'] }} ({{ elst['project_name'] }})</h3>
+    <a href="{{ url_for('add_drawing', erection_list_id=elst['id']) }}" class="btn btn-primary mb-3">Add Drawing</a>
+    <div class="elst-table-responsive">
+        <table class="elst-table">
+            <thead>
+                <tr>
+                    <th>Sl. No.</th>
+                    <th>ID</th>
+                    <th>Erection List ID</th>
+                    <th>Drawing Ref</th>
+                    <th>Rev. No.</th>
+                    <th>Amd. Code</th>
+                    <th>EL Date</th>
+                    <th>Description</th>
+                    <th>Despatch Status</th>
+                    <th>Despatch Date</th>
+                    <th>Unit</th>
+                    <th>Remarks</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for drawing in drawings %}
+                <tr>
+                    <td>{{ drawing['sl_no'] }}</td>
+                    <td>{{ drawing['id'] }}</td>
+                    <td>{{ drawing['erection_list_id'] }}</td>
+                    <td>{{ drawing['drawing_ref'] }}</td>
+                    <td>{{ drawing['rev_no'] }}</td>
+                    <td>{{ drawing['amd_code'] }}</td>
+                    <td>{{ drawing['el_date'] }}</td>
+                    <td>{{ drawing['description'] }}</td>
+                    <td>{{ drawing['despatch_status'] }}</td>
+                    <td>{{ drawing['despatch_date'] }}</td>
+                    <td>{{ drawing['unit'] }}</td>
+                    <td>{{ drawing['remarks'] }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <a href="{{ url_for('elsts') }}" class="btn btn-secondary">Back to ELSTs</a>
+</div>
+{% endblock %}
